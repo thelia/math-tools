@@ -205,12 +205,33 @@ class Number implements \Serializable, \JsonSerializable
     }
 
     /**
+     * Used instead of serialize() since PHP 7.4.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array($this->dividend, $this->divisor);
+    }
+
+    /**
+     * Used instead of unserialize() since PHP 7.4.
+     *
+     * @param array $data
+     */
+    public function __unserialize(array $data)
+    {
+        list($this->dividend, $this->divisor) = $data;
+    }
+
+    /**
      * (PHP 5 &gt;= 5.4.0)<br/>
      * Specify data which should be serialized to JSON
      * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @return mixed data which can be serialized by <b>json_encode</b>,
      * which is a value of any type other than a resource.
      */
+    #[\ReturnTypeWillChange]
     function jsonSerialize()
     {
         return $this->serialize();
