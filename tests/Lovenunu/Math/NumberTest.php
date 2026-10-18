@@ -57,5 +57,17 @@ class NumberTest extends PHPUnit_Framework_TestCase
         $mulPrice = $divPrice->multiply('1.2');
         $this->assertEquals(3.99, $mulPrice->getNumber());
     }
+
+    public function testSerializeRoundTrip()
+    {
+        $price = new Number('3.99');
+
+        $copy = unserialize(serialize($price));
+        $this->assertEquals(3.99, $copy->getNumber());
+
+        $legacy = unserialize('C:18:"Thelia\\Math\\Number":9:{[399,100]}');
+        $this->assertEquals(3.99, $legacy->getNumber());
+
+        $this->assertEquals('"[399,100]"', json_encode($price));
+    }
 }
- 
